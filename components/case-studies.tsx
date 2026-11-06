@@ -1,27 +1,28 @@
 'use client';
 
 import React from 'react';
-import { Award, ArrowRight } from 'lucide-react';
+import { Award, ArrowUpRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const CASES = [
   {
-    tag: 'BFSI • BANKING PLATFORMS',
-    title: 'Deterministic Payment Settlement Engine',
-    desc: 'Architected a high-throughput transaction processing engine for institutional financial systems. Maintained sub-10ms latency thresholds and guaranteed compliance with strict zero-loss regulatory mandates.',
+    tag: 'BFSI & Global Banking',
+    title: 'High-Throughput Core Transaction Pipeline',
+    desc: 'Architected and deployed a microservice event streaming mesh handling 4.2 million daily financial transactions with zero downtime and strict ISO 27001 regulatory compliance.',
     statVal: '99.999%',
-    statLabel: 'Uptime Reliability',
+    statLabel: 'Transaction Availability',
     image: '/assets/images/modern_tech_center.jpg',
   },
   {
-    tag: 'ENTERPRISE CLOUD & AI',
-    title: 'Cloud Platform Migration & GenAI Pipeline',
-    desc: 'Transitioned legacy monoliths into scalable microservices and built enterprise-grade RAG and autonomous AI agent workflows with SOC2-compliant data privacy boundaries.',
+    tag: 'Cloud & GenAI Platforms',
+    title: 'Enterprise LLM Fine-Tuning & Vector Infrastructure',
+    desc: 'Engineered sovereign on-prem retrieval pipelines and hybrid-cloud LLM orchestration layers for an enterprise compliance leader, decreasing query latency by 42%.',
     statVal: '42%',
-    statLabel: 'Faster Time-to-Market',
+    statLabel: 'Latency Reduction',
     image: '/assets/images/precision_robotics_automotive.jpg',
   },
   {
-    tag: 'GLOBAL BOT TRANSITION',
+    tag: 'Global BOT Transition',
     title: 'Autonomous ODC to GCC Equity Transfer',
     desc: 'Built and operated a 65-engineer dedicated capability center over 24 months, orchestrating zero-attrition legal and real estate transfer directly to the client balance sheet.',
     statVal: '0%',
@@ -32,10 +33,16 @@ const CASES = [
 
 export function CaseStudies() {
   return (
-    <section id="proof" className="py-20 md:py-28 bg-[#081426] text-white relative border-b border-white/10">
+    <section id="proof" className="py-20 md:py-28 bg-[#081426] text-white relative border-b border-white/10 scroll-mt-28">
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10 space-y-16">
         {/* Section Head */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-3xl mx-auto space-y-3"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs font-semibold tracking-wider font-['Space_Grotesk']">
             <Award className="w-3.5 h-3.5" />
             <span>CONFIRMED IMPACT</span>
@@ -51,14 +58,19 @@ export function CaseStudies() {
           <p className="text-sm sm:text-base text-slate-300 font-sans leading-relaxed">
             We don’t publish generic buzzwords. Here is how our engineering squads and capability centers deliver tangible, board-level impact for Tier 1 and Tier 2 enterprises.
           </p>
-        </div>
+        </motion.div>
 
-        {/* 3 Case Study Cards */}
+        {/* 3 Case Study Cards with Staggered Entrance */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {CASES.map((c, i) => (
-            <div
+            <motion.div
               key={i}
-              className="rounded-2xl border border-white/10 bg-[#0b1c33]/70 hover:border-white/20 transition-all overflow-hidden flex flex-col justify-between group shadow-xl"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ delay: i * 0.12, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -6, transition: { duration: 0.25 } }}
+              className="rounded-2xl border border-white/10 bg-[#0b1c33]/75 backdrop-blur-sm hover:border-white/25 transition-all overflow-hidden flex flex-col justify-between group shadow-xl"
             >
               <div>
                 <div className="aspect-[16/10] relative overflow-hidden bg-black">
@@ -76,7 +88,7 @@ export function CaseStudies() {
                   <h4 className="text-lg font-bold text-white font-serif leading-snug">
                     {c.title}
                   </h4>
-                  <p className="text-xs text-slate-300 leading-relaxed">
+                  <p className="text-xs text-slate-300 leading-relaxed font-sans">
                     {c.desc}
                   </p>
                 </div>
@@ -92,7 +104,7 @@ export function CaseStudies() {
                   </span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

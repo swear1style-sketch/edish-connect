@@ -1,18 +1,50 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react';
+import { Menu, X, ArrowRight, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const NAV_ITEMS = [
+  { label: 'OVERVIEW', href: '#hero', id: 'hero' },
+  { label: 'MODELS', href: '#operating-models', id: 'operating-models' },
+  { label: 'CULTURAL FIT', href: '#cultural-fit', id: 'cultural-fit' },
+  { label: '3D GALLERY', href: '#gallery', id: 'gallery', highlight: true },
+  { label: 'JOURNEY', href: '#staircase', id: 'staircase' },
+  { label: 'JAIPUR', href: '#why-jaipur', id: 'why-jaipur' },
+  { label: 'WHY 9 HZ', href: '#why-9hz', id: 'why-9hz' },
+  { label: 'PROOF', href: '#proof', id: 'proof' },
+];
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
 
+  // Smooth scroll spy and scrolled detection
   useEffect(() => {
     let ticking = false;
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 35);
+          const scrollPos = window.scrollY;
+          setIsScrolled(scrollPos > 30);
+
+          // Find current section in view
+          const sections = NAV_ITEMS.map((item) => document.getElementById(item.id)).filter(
+            Boolean,
+          ) as HTMLElement[];
+
+          const current = sections.find((el) => {
+            const rect = el.getBoundingClientRect();
+            return rect.top <= 160 && rect.bottom >= 160;
+          });
+
+          if (current) {
+            setActiveSection(current.id);
+          } else if (scrollPos < 200) {
+            setActiveSection('hero');
+          }
+
           ticking = false;
         });
         ticking = true;
@@ -24,71 +56,50 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Prevent background scroll when mobile drawer is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none px-4 md:px-6">
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none px-4 md:px-6 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isScrolled ? 'pt-2.5 md:pt-3' : 'pt-4 md:pt-5'
+        }`}
+      >
         <nav
           id="navbar"
-          className={`pointer-events-auto mt-3 md:mt-4 flex items-center justify-between w-full rounded-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`pointer-events-auto flex items-center justify-between w-full max-w-6xl rounded-2xl md:rounded-[20px] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             isScrolled
-              ? 'max-w-5xl px-5 py-2.5 md:px-6 md:py-3 glass-nav-scrolled'
-              : 'max-w-6xl px-6 py-3 md:px-8 md:py-3.5 glass-nav-transparent'
+              ? 'px-5 py-2.5 md:px-7 md:py-3 bg-[#081426]/92 backdrop-blur-2xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.65),0_0_24px_rgba(200,155,60,0.08)]'
+              : 'px-6 py-3.5 md:px-8 md:py-4 bg-[#081426]/65 backdrop-blur-xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)]'
           }`}
         >
           {/* Brand Identity */}
-          <a href="#" className="flex items-center gap-2.5 flex-shrink-0 group">
-            <svg
-              className="w-7 h-7 flex-shrink-0 filter drop-shadow-[0_0_8px_rgba(200,155,60,0.4)] transition-transform duration-300 group-hover:scale-105"
-              viewBox="0 0 36 36"
-              fill="none"
-            >
-              <defs>
-                <linearGradient id="goldNavGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#F5D48A" />
-                  <stop offset="50%" stopColor="#C89B3C" />
-                  <stop offset="100%" stopColor="#936717" />
-                </linearGradient>
-              </defs>
-              <rect
-                x="2"
-                y="2"
-                width="32"
-                height="32"
-                rx="7"
-                stroke="url(#goldNavGrad)"
-                strokeWidth="1.2"
-                strokeOpacity="0.35"
-                fill="rgba(200, 155, 60, 0.08)"
-              />
-              <path
-                d="M8 28C8 16.954 16.954 8 28 8"
-                stroke="url(#goldNavGrad)"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-              />
-              <line
-                x1="18"
-                y1="12"
-                x2="18"
-                y2="24"
-                stroke="url(#goldNavGrad)"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
-              <line
-                x1="12"
-                y1="18"
-                x2="24"
-                y2="18"
-                stroke="url(#goldNavGrad)"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
-              <circle cx="18" cy="18" r="2.2" fill="#FFFFFF" />
-            </svg>
+          <a
+            href="#hero"
+            className="flex items-center gap-2.5 flex-shrink-0 group focus:outline-none"
+            aria-label="Edish Connect home"
+          >
+            <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 p-1 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shadow-[0_0_12px_rgba(200,155,60,0.18)]">
+              <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="18" y="20" width="34" height="9" rx="2" fill="#FFFFFF" />
+                <rect x="18" y="45" width="26" height="9" rx="2" fill="#FFFFFF" />
+                <rect x="18" y="70" width="34" height="9" rx="2" fill="#FFFFFF" />
+                <rect x="62" y="20" width="10" height="59" rx="2" fill="#C89B3C" />
+              </svg>
+            </div>
             <div className="flex flex-col whitespace-nowrap">
-              <span className="font-['Space_Grotesk'] font-extrabold text-[0.84rem] tracking-[0.14em] text-white leading-tight">
-                EDISH CONNECT
+              <span className="font-['Space_Grotesk'] font-extrabold text-[0.90rem] tracking-[0.06em] text-white leading-tight">
+                EDISH <span className="text-[#C89B3C]">CONNECT</span>
               </span>
               <span className="hidden sm:inline font-['Space_Grotesk'] text-[0.48rem] tracking-[0.18em] uppercase text-[#dfb15b] font-bold">
                 ENGINEERING MEETS INSPIRATION
@@ -96,72 +107,44 @@ export function Navbar() {
             </div>
           </a>
 
-          {/* Desktop Links (One single line, centered) */}
-          <div className="hidden lg:flex items-center justify-center gap-1 xl:gap-2 whitespace-nowrap">
-            <a
-              href="#"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold tracking-wider font-['Space_Grotesk']"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-              <span>HOME</span>
-            </a>
-            <a
-              href="#operating-models"
-              className="px-3 py-1 text-xs font-medium text-slate-300 hover:text-white transition-colors tracking-wide font-['Space_Grotesk']"
-            >
-              MODELS
-            </a>
-            <a
-              href="#cultural-fit"
-              className="px-3 py-1 text-xs font-medium text-slate-300 hover:text-white transition-colors tracking-wide font-['Space_Grotesk']"
-            >
-              CULTURAL FIT
-            </a>
-            <a
-              href="#gallery"
-              className="px-3 py-1 text-xs font-medium text-amber-300 hover:text-amber-200 transition-colors tracking-wide font-['Space_Grotesk']"
-            >
-              3D GALLERY
-            </a>
-            <a
-              href="#staircase"
-              className="px-3 py-1 text-xs font-medium text-slate-300 hover:text-white transition-colors tracking-wide font-['Space_Grotesk']"
-            >
-              JOURNEY
-            </a>
-            <a
-              href="#why-jaipur"
-              className="px-3 py-1 text-xs font-medium text-slate-300 hover:text-white transition-colors tracking-wide font-['Space_Grotesk']"
-            >
-              JAIPUR
-            </a>
-            <a
-              href="#why-9hz"
-              className="px-3 py-1 text-xs font-medium text-slate-300 hover:text-white transition-colors tracking-wide font-['Space_Grotesk']"
-            >
-              WHY 9 HZ
-            </a>
-            <a
-              href="#proof"
-              className="px-3 py-1 text-xs font-medium text-slate-300 hover:text-white transition-colors tracking-wide font-['Space_Grotesk']"
-            >
-              PROOF
-            </a>
+          {/* Desktop Nav Items */}
+          <div className="hidden lg:flex items-center justify-center gap-1 xl:gap-1.5 whitespace-nowrap">
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <a
+                  key={item.id}
+                  href={item.href}
+                  className={`relative px-2.5 py-1.5 rounded-lg text-[0.72rem] xl:text-[0.76rem] font-medium tracking-[0.08em] font-['Space_Grotesk'] transition-all duration-200 ${
+                    isActive
+                      ? 'text-amber-300 font-semibold bg-white/10 shadow-[0_0_12px_rgba(200,155,60,0.18)]'
+                      : item.highlight
+                      ? 'text-amber-400 hover:text-amber-200 hover:bg-white/5'
+                      : 'text-slate-300 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span className="relative z-10 flex items-center gap-1">
+                    {item.highlight && <Sparkles className="w-2.5 h-2.5 text-amber-400 inline" />}
+                    {item.label}
+                  </span>
+                </a>
+              );
+            })}
           </div>
 
-          {/* Action Button & Mobile Hamburger */}
-          <div className="flex items-center gap-2 whitespace-nowrap">
+          {/* CTA Button & Mobile Trigger */}
+          <div className="flex items-center gap-2.5 whitespace-nowrap">
             <a
               href="#contact"
-              className="hidden sm:inline-flex items-center gap-1.5 btn-gold-solid rounded-full px-4 py-1.5 md:px-5 md:py-2 text-[0.70rem] font-bold tracking-wider uppercase font-['Space_Grotesk'] cursor-pointer"
+              className="hidden sm:inline-flex items-center gap-2 btn-gold-solid rounded-xl px-4 py-2 md:px-5 md:py-2.5 text-[0.72rem] font-bold tracking-wider uppercase font-['Space_Grotesk'] group cursor-pointer shadow-[0_4px_16px_rgba(200,155,60,0.35)]"
             >
               <span>GET IN TOUCH</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
             </a>
 
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 rounded-xl bg-white/10 border border-white/15 text-white hover:bg-white/15 transition-colors"
+              className="lg:hidden p-2 rounded-xl bg-white/10 border border-white/15 text-white hover:bg-white/15 transition-colors focus:outline-none"
               aria-label="Toggle menu"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -170,69 +153,68 @@ export function Navbar() {
         </nav>
       </header>
 
-      {/* Mobile Drawer */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-40 bg-[#081426]/95 backdrop-blur-2xl flex flex-col p-6 pt-24 space-y-6 lg:hidden animate-in fade-in slide-in-from-top-4 duration-300">
-          <a
-            href="#contact"
-            onClick={() => setMobileOpen(false)}
-            className="w-full text-center py-3 btn-gold-solid rounded-full text-sm font-bold uppercase tracking-wider font-['Space_Grotesk']"
+      {/* Mobile Drawer with Framer Motion */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-40 bg-[#081426]/98 backdrop-blur-2xl flex flex-col p-6 pt-24 space-y-6 lg:hidden"
           >
-            Schedule Executive Briefing
-          </a>
-          <nav className="flex flex-col space-y-4 text-base font-semibold font-['Space_Grotesk']">
-            <a
-              href="#operating-models"
-              onClick={() => setMobileOpen(false)}
-              className="text-white hover:text-amber-400 py-1 transition-colors border-b border-white/10"
-            >
-              Operating Models (ODC / BOT / GCC)
-            </a>
-            <a
-              href="#cultural-fit"
-              onClick={() => setMobileOpen(false)}
-              className="text-white hover:text-amber-400 py-1 transition-colors border-b border-white/10"
-            >
-              Cultural Fit Simulation
-            </a>
-            <a
-              href="#gallery"
-              onClick={() => setMobileOpen(false)}
-              className="text-amber-400 hover:text-amber-300 py-1 transition-colors border-b border-white/10"
-            >
-              3D Cylindrical Gallery Showcase
-            </a>
-            <a
-              href="#staircase"
-              onClick={() => setMobileOpen(false)}
-              className="text-white hover:text-amber-400 py-1 transition-colors border-b border-white/10"
-            >
-              The Staircase Journey
-            </a>
-            <a
-              href="#why-jaipur"
-              onClick={() => setMobileOpen(false)}
-              className="text-white hover:text-amber-400 py-1 transition-colors border-b border-white/10"
-            >
-              Jaipur Tier-2 Advantage
-            </a>
-            <a
-              href="#calculator"
-              onClick={() => setMobileOpen(false)}
-              className="text-white hover:text-amber-400 py-1 transition-colors border-b border-white/10"
-            >
-              Model Estimator
-            </a>
-            <a
-              href="#proof"
-              onClick={() => setMobileOpen(false)}
-              className="text-white hover:text-amber-400 py-1 transition-colors border-b border-white/10"
-            >
-              Verified Proof & Impact
-            </a>
-          </nav>
-        </div>
-      )}
+            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 p-1 flex items-center justify-center">
+                  <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="18" y="20" width="34" height="9" rx="2" fill="#FFFFFF" />
+                    <rect x="18" y="45" width="26" height="9" rx="2" fill="#FFFFFF" />
+                    <rect x="18" y="70" width="34" height="9" rx="2" fill="#FFFFFF" />
+                    <rect x="62" y="20" width="10" height="59" rx="2" fill="#C89B3C" />
+                  </svg>
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-['Space_Grotesk'] font-extrabold text-base text-white">
+                    EDISH <span className="text-[#C89B3C]">CONNECT</span>
+                  </span>
+                  <span className="font-['Space_Grotesk'] text-[0.55rem] text-amber-400 tracking-wider uppercase font-bold">
+                    ENGINEERING MEETS INSPIRATION
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <nav className="flex flex-col space-y-3 text-base font-medium font-['Space_Grotesk'] overflow-y-auto">
+              {NAV_ITEMS.map((item) => (
+                <a
+                  key={item.id}
+                  href={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  className={`py-2 px-3 rounded-xl transition-colors flex items-center justify-between ${
+                    activeSection === item.id
+                      ? 'bg-white/10 text-amber-400 font-semibold'
+                      : 'text-slate-200 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  <ArrowRight className="w-4 h-4 opacity-50" />
+                </a>
+              ))}
+            </nav>
+
+            <div className="pt-4 border-t border-white/10">
+              <a
+                href="#contact"
+                onClick={() => setMobileOpen(false)}
+                className="w-full inline-flex items-center justify-center gap-2 py-3.5 btn-gold-solid rounded-xl text-sm font-bold uppercase tracking-wider font-['Space_Grotesk']"
+              >
+                <span>Schedule Executive Briefing</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

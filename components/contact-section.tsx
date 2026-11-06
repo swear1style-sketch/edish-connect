@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
@@ -12,9 +13,15 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-28 bg-[#081426] relative">
+    <section id="contact" className="py-20 md:py-28 bg-[#081426] relative scroll-mt-28">
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10 space-y-12">
-        <div className="text-center max-w-2xl mx-auto space-y-3">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-2xl mx-auto space-y-3"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs font-semibold tracking-wider font-['Space_Grotesk']">
             <span>SCHEDULE STRATEGIC CONSULTATION</span>
           </div>
@@ -24,20 +31,26 @@ export function ContactSection() {
           <p className="text-sm sm:text-base text-slate-300 font-sans">
             Schedule a confidential executive briefing with our leadership team in Munich, Zürich, or Jaipur.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Details */}
-          <div className="lg:col-span-5 space-y-6 rounded-2xl border border-white/10 bg-[#0b1c33]/70 p-6 sm:p-8">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 space-y-6 rounded-2xl border border-white/10 bg-[#0b1c33]/75 backdrop-blur-sm p-6 sm:p-8"
+          >
             <h3 className="text-xl font-bold text-white font-serif">Executive Liaison Office</h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-slate-300 leading-relaxed font-sans">
               Direct consultation with our Founding Partners and Senior GCC Architects. We assess feasibility, SEZ structuring, and pod capability within 48 hours.
             </p>
 
             <div className="space-y-4 pt-4 border-t border-white/10 text-xs">
               <div className="flex items-center gap-3 text-slate-300">
                 <MapPin className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                <span>World Trade Park & Mahindra World City SEZ, Jaipur, India</span>
+                <span>World Trade Park &amp; Mahindra World City SEZ, Jaipur, India</span>
               </div>
               <div className="flex items-center gap-3 text-slate-300">
                 <Mail className="w-4 h-4 text-amber-400 flex-shrink-0" />
@@ -49,19 +62,25 @@ export function ContactSection() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-[0.72rem] text-amber-200">
+            <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 p-4 text-[0.72rem] text-amber-200">
               <strong className="block text-white font-bold mb-1">Standard Non-Disclosure:</strong>
               All strategic inquiries are governed by reciprocal bi-lateral NDAs compliant with Swiss FINMA and GDPR standards.
             </div>
-          </div>
+          </motion.div>
 
           {/* Form */}
-          <div className="lg:col-span-7 rounded-2xl border border-white/15 bg-[#0a182d] p-6 sm:p-8 shadow-2xl">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 rounded-2xl border border-white/15 bg-[#0a182d] p-6 sm:p-8 shadow-2xl"
+          >
             {submitted ? (
               <div className="text-center py-12 space-y-4">
                 <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
                 <h4 className="text-2xl font-bold text-white font-serif">Briefing Request Confirmed</h4>
-                <p className="text-xs text-slate-300 max-w-md mx-auto">
+                <p className="text-xs text-slate-300 max-w-md mx-auto font-sans">
                   Thank you. An Edish Connect Managing Partner will contact you within 24 business hours to coordinate the bilateral NDA and agenda.
                 </p>
               </div>
@@ -76,7 +95,7 @@ export function ContactSection() {
                       required
                       type="text"
                       placeholder="e.g. Dr. Thomas Weber"
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
                     />
                   </div>
                   <div>
@@ -87,7 +106,7 @@ export function ContactSection() {
                       required
                       type="email"
                       placeholder="t.weber@enterprise.de"
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
                     />
                   </div>
                 </div>
@@ -101,7 +120,7 @@ export function ContactSection() {
                       required
                       type="text"
                       placeholder="e.g. Global Tech AG"
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
                     />
                   </div>
                   <div>
@@ -109,7 +128,7 @@ export function ContactSection() {
                       Planned Pod Size
                     </label>
                     <select
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#0e213b] border border-white/10 text-white text-xs focus:outline-none focus:border-amber-400"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0e213b] border border-white/10 text-white text-xs focus:outline-none focus:border-amber-400 transition-colors"
                     >
                       <option>10–25 Engineers (Dedicated ODC)</option>
                       <option>25–50 Engineers (BOT Vehicle)</option>
@@ -121,25 +140,25 @@ export function ContactSection() {
 
                 <div>
                   <label className="block text-xs font-semibold font-['Space_Grotesk'] uppercase tracking-wider text-slate-300 mb-1.5">
-                    Strategic Scope & Objective
+                    Strategic Scope &amp; Objective
                   </label>
                   <textarea
                     rows={3}
                     placeholder="Brief outline of domain, target launch timeframe, or cultural requirements..."
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="btn-gold-solid w-full flex items-center justify-center gap-2 py-3 rounded-full text-xs font-bold uppercase tracking-wider font-['Space_Grotesk'] shadow-xl cursor-pointer"
+                  className="btn-gold-solid w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider font-['Space_Grotesk'] shadow-xl cursor-pointer group"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                   <span>Request Executive Briefing</span>
                 </button>
               </form>
             )}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

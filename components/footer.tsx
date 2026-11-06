@@ -10,9 +10,17 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Info */}
           <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <span className="font-['Space_Grotesk'] font-extrabold text-base tracking-[0.14em] text-white">
-                EDISH CONNECT
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 p-1 flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="18" y="20" width="34" height="9" rx="2" fill="#FFFFFF" />
+                  <rect x="18" y="45" width="26" height="9" rx="2" fill="#FFFFFF" />
+                  <rect x="18" y="70" width="34" height="9" rx="2" fill="#FFFFFF" />
+                  <rect x="62" y="20" width="10" height="59" rx="2" fill="#C89B3C" />
+                </svg>
+              </div>
+              <span className="font-['Space_Grotesk'] font-extrabold text-base tracking-[0.06em] text-white">
+                EDISH <span className="text-[#C89B3C]">CONNECT</span>
               </span>
             </div>
             <p className="text-xs text-slate-400 max-w-sm leading-relaxed">

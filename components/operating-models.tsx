@@ -1,52 +1,53 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Layers, ShieldCheck, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Layers, ShieldCheck, Building2, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const MODELS = [
   {
     id: 'odc',
-    badge: 'RAPID COMMENCEMENT',
-    title: 'Dedicated ODC',
-    subtitle: 'High-Velocity Pods Under Edish Legal Entity',
+    title: 'Dedicated Offshore Development Center',
+    subtitle: 'High-Velocity Pod Extension',
+    badge: 'Immediate Agility',
     description:
-      'Begin operations within 4–6 weeks. Zero foreign entity incorporation overhead, turnkey Class-A Jaipur facility, with sovereign IP assignments and dedicated biometric security.',
+      'Turnkey, dedicated squads of engineers, QA leads, and architects working directly within your daily sprints and ticketing systems with zero long-term lease liabilities.',
     benefits: [
-      '4–6 week deployment without establishing Indian legal entity',
-      '40–60% operational cost savings compared to US/EU in-house',
-      'Zero cross-client contamination with isolated network VLANs',
-      '98.2% retention rate with Tier-2 Jaipur engineering talent',
+      'Engineers assigned exclusively to your codebase',
+      'Direct integration with your daily Jira/Slack standups',
+      'Sub-2% attrition with multi-year institutional retention',
+      'Predictable monthly billing with zero CapEx outlay',
     ],
-    timeline: '4–6 Weeks',
-    commitment: '12 Months',
+    timeline: '2–4 Weeks Launch',
+    commitment: '6+ Months',
   },
   {
     id: 'bot',
-    badge: 'STRATEGIC MATURITY',
     title: 'Build-Operate-Transfer (BOT)',
-    subtitle: 'De-risked Incubation & Seamless Balance Sheet Transfer',
+    subtitle: 'Zero-Risk Subsidiary Incubation',
+    badge: 'Risk Mitigation',
     description:
-      'We build, staff, and operationalize your dedicated center under mature governance. At your chosen horizon (typically 18–36 months), transfer the entire entity and team to your books.',
+      'We recruit, manage, and incubate your dedicated engineering entity in Jaipur. After meeting predetermined maturity and velocity milestones, 100% of staff, IP, and facilities transfer to your balance sheet.',
     benefits: [
-      'Zero legal risk during initial growth and culture assimilation',
-      'Pre-negotiated entity transfer valuation and governance handoff',
-      'Retain 100% of institutional domain knowledge and code history',
-      'Full HR, compliance, and real estate operational continuity',
+      'Zero setup friction—Edish shoulders initial statutory compliance',
+      'Mature team with deeply ingrained company culture pre-transfer',
+      'Built-in legal and corporate transfer framework with $0 buyout fee',
+      'Eliminates the standard 40% metro recruiter churn tax',
     ],
-    timeline: '18–36 Months Transfer',
-    commitment: '24 Months',
+    timeline: '6–18 Months Incubation',
+    commitment: '18–24 Month Transfer',
   },
   {
     id: 'gcc',
-    badge: 'PERMANENT SOVEREIGNTY',
-    title: 'Sovereign Captive GCC',
-    subtitle: 'Wholly-Owned Indian Subsidiary with Permanent IP',
+    title: 'Sovereign Global Capability Center (GCC)',
+    subtitle: 'Wholly-Owned Enterprise Asset',
+    badge: 'Full Balance Sheet Sovereign',
     description:
-      'For enterprises scaling past 50+ engineers requiring a long-term sovereign presence. We execute turnkey entity incorporation, SEZ tax structuring, campus selection, and talent acquisition.',
+      'We design, architect, and establish your direct captive center in Tier-2 Jaipur—complete with bespoke security perimeters, biometric access, and permanent corporate presence.',
     benefits: [
-      '100% direct balance-sheet ownership and sovereign IP governance',
-      'Full compliance with RBI, SEBI, FINMA, and international tax treaties',
-      'Direct executive oversight with zero agency margin markups',
+      '100% direct captive ownership on your company balance sheet',
+      'Tier-2 cost advantage: 40%–60% lower opex than metro centers',
+      'Full statutory and tax-incentive advisory with local authorities',
       'Permanent campus presence in Jaipur IT SEZ corridors',
     ],
     timeline: '12–16 Weeks Launch',
@@ -58,9 +59,15 @@ export function OperatingModels() {
   const [activeModel, setActiveModel] = useState('odc');
 
   return (
-    <section id="operating-models" className="py-20 md:py-28 bg-[#081426] relative">
+    <section id="operating-models" className="py-20 md:py-28 bg-[#081426] relative scroll-mt-28">
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10 space-y-12">
-        <div className="text-center max-w-2xl mx-auto space-y-3">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-2xl mx-auto space-y-3"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs font-semibold tracking-wider font-['Space_Grotesk']">
             <span>OPERATING VEHICLES</span>
           </div>
@@ -70,19 +77,24 @@ export function OperatingModels() {
           <p className="text-sm sm:text-base text-slate-300 font-sans">
             Whether starting with dedicated engineering pods or establishing a wholly-owned sovereign captive center, choose the model that fits your governance timeline.
           </p>
-        </div>
+        </motion.div>
 
-        {/* 3 Model Cards */}
+        {/* 3 Model Cards with Staggered Entrance */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {MODELS.map((model) => (
-            <div
+          {MODELS.map((model, idx) => (
+            <motion.div
               key={model.id}
-              className={`rounded-2xl border transition-all duration-300 p-6 flex flex-col justify-between space-y-6 ${
-                activeModel === model.id
-                  ? 'border-amber-400/60 bg-[#0d223f] shadow-[0_12px_36px_rgba(200,155,60,0.15)] scale-[1.02]'
-                  : 'border-white/10 bg-[#0b1c33]/70 hover:border-white/25 hover:bg-[#0b1c33]'
-              }`}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ delay: idx * 0.12, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -6, transition: { duration: 0.25 } }}
               onClick={() => setActiveModel(model.id)}
+              className={`rounded-2xl border transition-all duration-300 p-6 flex flex-col justify-between space-y-6 cursor-pointer ${
+                activeModel === model.id
+                  ? 'border-amber-400/80 bg-[#0d223f] shadow-[0_16px_40px_rgba(200,155,60,0.18)]'
+                  : 'border-white/10 bg-[#0b1c33]/70 hover:border-white/30 hover:bg-[#0b1c33]'
+              }`}
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -99,7 +111,7 @@ export function OperatingModels() {
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-300 leading-relaxed">{model.description}</p>
+                <p className="text-xs text-slate-300 leading-relaxed font-sans">{model.description}</p>
 
                 <div className="space-y-2 pt-2 border-t border-white/10">
                   {model.benefits.map((benefit, i) => (
@@ -113,15 +125,15 @@ export function OperatingModels() {
 
               <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-slate-400">
                 <div>
-                  <span className="block text-[0.60rem] uppercase tracking-wider text-slate-500">Timeline</span>
+                  <span className="block text-[0.60rem] uppercase tracking-wider text-slate-500 font-['Space_Grotesk']">Timeline</span>
                   <span className="text-white font-semibold">{model.timeline}</span>
                 </div>
                 <div className="text-right">
-                  <span className="block text-[0.60rem] uppercase tracking-wider text-slate-500">Term</span>
+                  <span className="block text-[0.60rem] uppercase tracking-wider text-slate-500 font-['Space_Grotesk']">Term</span>
                   <span className="text-amber-300 font-semibold">{model.commitment}</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

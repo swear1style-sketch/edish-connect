@@ -1,3 +1,4 @@
+import { WelcomeCurtain } from '@/components/welcome-curtain';
 import { Navbar } from '@/components/navbar';
 import { Hero } from '@/components/hero';
 import { ClientStrip } from '@/components/client-strip';
@@ -15,6 +16,7 @@ import { Footer } from '@/components/footer';
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#081426] text-white selection:bg-[#0f223d] selection:text-[#f2cc83]">
+      <WelcomeCurtain />
       <Navbar />
       <Hero />
       <ClientStrip />

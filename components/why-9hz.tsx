@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Activity } from 'lucide-react';
+import { Activity, Quote, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export function Why9Hz() {
   const [selectedFreq, setSelectedFreq] = useState<number>(9);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -18,35 +19,42 @@ export function Why9Hz() {
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const w = canvas.width;
-      const h = canvas.height;
-      const midY = h / 2;
 
-      // Draw subtle grid line
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-      ctx.lineWidth = 1;
+      const width = canvas.width;
+      const height = canvas.height;
+      const centerY = height / 2;
+
       ctx.beginPath();
-      ctx.moveTo(0, midY);
-      ctx.lineTo(w, midY);
-      ctx.stroke();
+      ctx.lineWidth = selectedFreq === 9 ? 2.5 : 1.8;
 
-      // Draw wave
-      ctx.beginPath();
-      ctx.lineWidth = 2.5;
-      ctx.strokeStyle = selectedFreq === 9 ? '#dfb15b' : selectedFreq === 20 ? '#ef4444' : '#38bdf8';
-
-      const cycles = selectedFreq === 9 ? 3.5 : selectedFreq === 20 ? 8 : 1.5;
-      const amplitude = selectedFreq === 9 ? 28 : selectedFreq === 20 ? 14 : 36;
-      const speed = selectedFreq === 9 ? 0.04 : selectedFreq === 20 ? 0.09 : 0.02;
-
-      for (let x = 0; x < w; x++) {
-        const angle = (x / w) * Math.PI * 2 * cycles + offset;
-        const y = midY + Math.sin(angle) * amplitude;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+      if (selectedFreq === 9) {
+        ctx.strokeStyle = '#c89b3c';
+        ctx.shadowColor = 'rgba(200, 155, 60, 0.8)';
+        ctx.shadowBlur = 12;
+      } else if (selectedFreq === 20) {
+        ctx.strokeStyle = '#ef4444';
+        ctx.shadowColor = 'rgba(239, 68, 68, 0.6)';
+        ctx.shadowBlur = 8;
+      } else {
+        ctx.strokeStyle = '#38bdf8';
+        ctx.shadowColor = 'rgba(56, 189, 248, 0.6)';
+        ctx.shadowBlur = 8;
       }
-      ctx.stroke();
 
+      const frequency = selectedFreq === 9 ? 0.025 : selectedFreq === 20 ? 0.07 : 0.012;
+      const amplitude = selectedFreq === 9 ? 34 : selectedFreq === 20 ? 18 : 42;
+      const speed = selectedFreq === 9 ? 0.045 : selectedFreq === 20 ? 0.09 : 0.02;
+
+      for (let x = 0; x < width; x++) {
+        const y = centerY + Math.sin(x * frequency + offset) * amplitude;
+        if (x === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+
+      ctx.stroke();
       offset += speed;
       animationFrameId = requestAnimationFrame(render);
     };
@@ -57,14 +65,20 @@ export function Why9Hz() {
   }, [selectedFreq]);
 
   return (
-    <section id="why-9hz" className="py-20 md:py-28 bg-[#081426] text-white relative border-y border-white/10 overflow-hidden">
+    <section id="why-9hz" className="py-20 md:py-28 bg-[#081426] text-white relative border-y border-white/10 overflow-hidden scroll-mt-28">
       {/* Background glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(200,155,60,0.1),transparent_70%)] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10 space-y-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           {/* Info */}
-          <div className="lg:col-span-7 space-y-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 space-y-6"
+          >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs font-semibold tracking-wider font-['Space_Grotesk']">
               <Activity className="w-3.5 h-3.5" />
               <span>THE ORIGIN OF OUR NAME</span>
@@ -85,42 +99,48 @@ export function Why9Hz() {
               This is why we named our company <strong>Edish</strong>. We reject the false dichotomy that engineering is merely cold, mechanical code, or that inspiration is undisciplined artistic daydreaming. At Edish, we synchronize rigorous deterministic systems with deep human inspiration.
             </p>
 
-            <div className="flex flex-wrap gap-2 pt-2">
+            <div className="flex flex-wrap gap-2.5 pt-2">
               <button
                 onClick={() => setSelectedFreq(9)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wider uppercase font-['Space_Grotesk'] transition-all ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wider uppercase font-['Space_Grotesk'] transition-all cursor-pointer ${
                   selectedFreq === 9
-                    ? 'bg-amber-500 text-slate-950 shadow-lg'
-                    : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white'
+                    ? 'bg-amber-500 text-slate-950 shadow-[0_0_18px_rgba(200,155,60,0.4)]'
+                    : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10'
                 }`}
               >
                 9 Hz (Alpha Flow)
               </button>
               <button
                 onClick={() => setSelectedFreq(20)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wider uppercase font-['Space_Grotesk'] transition-all ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wider uppercase font-['Space_Grotesk'] transition-all cursor-pointer ${
                   selectedFreq === 20
-                    ? 'bg-red-500 text-white shadow-lg'
-                    : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white'
+                    ? 'bg-red-500 text-white shadow-[0_0_18px_rgba(239,68,68,0.4)]'
+                    : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10'
                 }`}
               >
                 20 Hz (Beta Churn)
               </button>
               <button
                 onClick={() => setSelectedFreq(5)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wider uppercase font-['Space_Grotesk'] transition-all ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wider uppercase font-['Space_Grotesk'] transition-all cursor-pointer ${
                   selectedFreq === 5
-                    ? 'bg-sky-500 text-slate-950 shadow-lg'
-                    : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white'
+                    ? 'bg-sky-500 text-slate-950 shadow-[0_0_18px_rgba(56,189,248,0.4)]'
+                    : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10'
                 }`}
               >
                 5 Hz (Theta Dream)
               </button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Interactive Wave Widget */}
-          <div className="lg:col-span-5 rounded-2xl border border-white/15 bg-[#0b1c33]/80 backdrop-blur-xl p-6 shadow-2xl space-y-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 rounded-2xl border border-white/15 bg-[#0b1c33]/85 backdrop-blur-xl p-6 shadow-2xl space-y-4"
+          >
             <div className="flex justify-between items-center text-xs font-['Space_Grotesk']">
               <span className="uppercase tracking-widest text-amber-400 font-bold text-[0.68rem]">
                 Harmonic Waveform Synthesizer
@@ -141,27 +161,51 @@ export function Why9Hz() {
               className="w-full h-32 rounded-xl bg-black/40 border border-white/10"
             />
 
-            <div className="flex justify-between items-center pt-2 border-t border-white/10">
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-bold font-mono text-amber-400">{selectedFreq}</span>
-                <span className="text-xs text-slate-400 font-['Space_Grotesk']">Hz Resonance</span>
+            <div className="grid grid-cols-2 gap-3 pt-2 text-xs font-['Space_Grotesk']">
+              <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                <span className="text-[0.62rem] uppercase tracking-wider text-slate-400 block font-mono">
+                  State
+                </span>
+                <span className="text-amber-300 font-bold">
+                  {selectedFreq === 9
+                    ? 'Effortless Flow'
+                    : selectedFreq === 20
+                    ? 'High Stress & Churn'
+                    : 'Hypnagogic Drift'}
+                </span>
               </div>
-              <div className="text-[0.70rem] text-slate-400 text-right max-w-[200px] leading-tight">
-                Where rational software architecture unites with human creative passion.
+              <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+                <span className="text-[0.62rem] uppercase tracking-wider text-slate-400 block font-mono">
+                  Engineering Impact
+                </span>
+                <span className="text-white font-semibold">
+                  {selectedFreq === 9
+                    ? '100% Code Determinism'
+                    : selectedFreq === 20
+                    ? 'Syntax Errors & Friction'
+                    : 'Unfinished Visions'}
+                </span>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Founding Mandate Quote */}
-        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent p-8 md:p-10 text-center space-y-3">
-          <p className="text-lg sm:text-xl md:text-2xl font-serif italic text-amber-200/90 leading-relaxed max-w-3xl mx-auto">
-            “Engineering without inspiration creates systems. Inspiration without engineering creates ideas. Together they build the future.”
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.8 }}
+          className="rounded-2xl border border-amber-500/20 bg-gradient-to-r from-amber-500/10 via-[#0b1c33]/90 to-amber-500/10 p-8 sm:p-10 text-center relative max-w-4xl mx-auto shadow-xl"
+        >
+          <Quote className="w-8 h-8 text-amber-400 mx-auto mb-3 opacity-60" />
+          <p className="text-lg sm:text-xl font-serif text-white leading-relaxed italic max-w-2xl mx-auto">
+            &ldquo;We built Edish Connect on a single, uncompromising belief: that the highest form of engineering is not merely compliance—it is harmony.&rdquo;
           </p>
-          <div className="text-xs uppercase tracking-widest font-['Space_Grotesk'] font-bold text-amber-400">
-            — The Edish Founding Mandate
+          <div className="pt-4 text-xs font-['Space_Grotesk'] tracking-widest uppercase text-amber-300 font-bold">
+            FOUNDING MANDATE • JAIPUR & GLOBAL
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
