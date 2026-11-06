@@ -4,3 +4,5 @@ extracted_site/
 *.log
 /tmp/
 node_modules/
+.next/
+dist/

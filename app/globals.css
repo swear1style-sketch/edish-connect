@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy-950: #050c17;
+  --navy-900: #081426;
+  --navy-850: #0b1c33;
+  --navy-800: #0f223d;
+  --navy-700: #183358;
+  --gold-500: #c89b3c;
+  --gold-400: #dfb15b;
+  --gold-300: #f2cc83;
+  --ivory-50: #fafaf8;
+  --font-serif: 'Fraunces', 'DM Serif Display', Georgia, serif;
+  --font-precision: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  background-color: #081426;
+  color: #fafaf8;
+}
+
+body {
+  overflow-x: hidden;
+  background-color: #081426;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glass Navbar Styling */
+.glass-nav-transparent {
+  background: rgba(8, 20, 38, 0.40);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.20);
+}
+
+.glass-nav-scrolled {
+  background: rgba(8, 20, 38, 0.92);
+  backdrop-filter: blur(28px) saturate(1.6);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.60), 0 0 35px rgba(200, 155, 60, 0.08);
+}
+
+/* Gold Gradient Accents */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #FFE39B 0%, #C89B3C 50%, #E8BD65 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-gold-solid {
+  background: linear-gradient(135deg, #dfb158 0%, #c89b3c 60%, #ab7f23 100%);
+  color: #0b1f2a;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 14px rgba(200, 155, 60, 0.35);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-gold-solid:hover {
+  background: linear-gradient(135deg, #e8be66 0%, #d4a544 60%, #b88a2a 100%);
+  box-shadow: 0 0 20px rgba(185, 151, 88, 0.50);
+  transform: translateY(-1px);
+}
+
+.btn-gold-solid:active {
+  transform: scale(0.98);
+}
