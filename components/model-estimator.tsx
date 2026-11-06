@@ -1,146 +1,185 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calculator, DollarSign, TrendingDown, Users, ArrowRight } from 'lucide-react';
+import { Calculator, ArrowRight, ShieldCheck, Users, Clock } from 'lucide-react';
 
 export function ModelEstimator() {
-  const [teamSize, setTeamSize] = useState<number>(15);
-  const [modelType, setModelType] = useState<'odc' | 'bot' | 'gcc'>('odc');
+  const [teamSize, setTeamSize] = useState<number>(25);
+  const [timeline, setTimeline] = useState<'urgent' | 'medium' | 'long'>('medium');
+  const [ownership, setOwnership] = useState<'vendor' | 'transfer' | 'direct'>('transfer');
 
-  // Rates per engineer per year
-  const US_RATE = 180000;
-  const TIER1_INDIA_RATE = 62000;
-  const EDISH_JAIPUR_RATE = modelType === 'odc' ? 36000 : modelType === 'bot' ? 39000 : 34000;
+  // Recommendation logic
+  const getRecommendation = () => {
+    if (ownership === 'direct' || teamSize >= 50) {
+      return {
+        name: 'Sovereign Captive GCC',
+        explanation: `With a target of ${teamSize} specialists and direct ownership objectives, a Sovereign Captive Center maximizes IP permanence, long-term balance-sheet valuation, and zero margin markup.`,
+        ramp: '12 to 16 Weeks',
+        retention: '98.6%',
+      };
+    }
+    if (ownership === 'transfer' || (teamSize >= 15 && timeline !== 'urgent')) {
+      return {
+        name: 'Build-Operate-Transfer (BOT)',
+        explanation: `A cohort of ${teamSize} specialists is prime for a BOT structure: Edish de-risks initial operations in Jaipur, proving out delivery before transferring legal ownership to you in 24 months.`,
+        ramp: '6 to 8 Weeks',
+        retention: '97.8%',
+      };
+    }
+    return {
+      name: 'Dedicated ODC',
+      explanation: `For rapid backlog velocity with ${teamSize} specialists, an ODC operates immediately under Edish legal entity with zero regulatory friction and 100% direct sprint command.`,
+      ramp: '3 to 5 Weeks',
+      retention: '98.2%',
+    };
+  };
 
-  const totalUsCost = teamSize * US_RATE;
-  const totalTier1Cost = teamSize * TIER1_INDIA_RATE;
-  const totalEdishCost = teamSize * EDISH_JAIPUR_RATE;
-
-  const savingsVsUs = totalUsCost - totalEdishCost;
-  const savingsPercentVsUs = Math.round((savingsVsUs / totalUsCost) * 100);
-
-  const savingsVsTier1 = totalTier1Cost - totalEdishCost;
+  const rec = getRecommendation();
 
   return (
-    <section id="calculator" className="py-20 md:py-28 bg-[#060e1a] relative border-t border-white/10">
+    <section id="calculator" className="py-20 md:py-28 bg-[#F1EBE3] text-[#151a22] relative border-b border-black/5">
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10 space-y-12">
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs font-semibold tracking-wider font-['Space_Grotesk']">
+        {/* Section Head */}
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#c89b3c]/40 bg-[#c89b3c]/10 text-[#8c6515] text-xs font-semibold tracking-wider font-['Space_Grotesk']">
             <Calculator className="w-3.5 h-3.5" />
-            <span>FINANCIAL EFFICIENCY ESTIMATOR</span>
+            <span>DECISION INTELLIGENCE</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white font-serif">
-            Calculate Your Tier-2 Jaipur Economics
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#081426] font-serif">
+            <span className="italic block font-normal text-2xl sm:text-3xl text-[#8c6515] mb-1">
+              Evaluate Your Model
+            </span>
+            Interactive GCC &amp; ODC Architecture Estimator.
           </h2>
-          <p className="text-sm sm:text-base text-slate-300 font-sans">
-            Compare dedicated capabilities in Jaipur against domestic US/EU in-house teams and crowded Tier-1 India hubs.
+
+          <p className="text-sm sm:text-base text-[#4a5568] font-sans leading-relaxed">
+            Adjust your target scale, desired speed, and corporate ownership preference to identify the optimal entry point on our Staircase Framework.
           </p>
         </div>
 
         {/* Calculator Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-[#0a182d] border border-white/15 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white/80 border border-black/10 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-lg">
           {/* Controls (Left 6 Cols) */}
-          <div className="lg:col-span-6 space-y-8">
+          <div className="lg:col-span-6 space-y-7">
             {/* Team Size Slider */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-semibold font-['Space_Grotesk'] uppercase tracking-wider text-slate-200">
-                  Engineering Pod Size
+                <label className="text-xs font-bold font-['Space_Grotesk'] uppercase tracking-wider text-[#081426]">
+                  Target Engineering Headcount
                 </label>
-                <span className="text-2xl font-bold font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-xl">
+                <span className="text-xl font-bold font-mono text-[#8c6515] bg-[#c89b3c]/15 px-3 py-1 rounded-xl border border-[#c89b3c]/30">
                   {teamSize} Engineers
                 </span>
               </div>
               <input
                 type="range"
                 min="5"
-                max="100"
+                max="150"
                 step="5"
                 value={teamSize}
                 onChange={(e) => setTeamSize(Number(e.target.value))}
-                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                className="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-[#c89b3c]"
               />
-              <div className="flex justify-between text-[0.65rem] text-slate-400 font-mono">
-                <span>5 (Initial Pod)</span>
-                <span>25 (Mid-Size ODC)</span>
-                <span>50+ (Sovereign GCC)</span>
-                <span>100</span>
+              <div className="flex justify-between text-[0.68rem] text-[#718096] font-mono">
+                <span>5 (Pod)</span>
+                <span>50 (ODC)</span>
+                <span>150+ (Sovereign GCC)</span>
               </div>
             </div>
 
-            {/* Model Selector */}
-            <div className="space-y-3">
-              <label className="text-sm font-semibold font-['Space_Grotesk'] uppercase tracking-wider text-slate-200">
-                Operating Vehicle
+            {/* Target Ramp Timeline */}
+            <div className="space-y-2">
+              <label className="text-xs font-bold font-['Space_Grotesk'] uppercase tracking-wider text-[#081426] block">
+                Target Ramp Timeline
               </label>
-              <div className="grid grid-cols-3 gap-2 p-1.5 rounded-2xl bg-black/40 border border-white/10">
-                {(['odc', 'bot', 'gcc'] as const).map((m) => (
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { id: 'urgent', label: 'Under 30 Days' },
+                  { id: 'medium', label: '60–90 Days' },
+                  { id: 'long', label: '6+ Months' },
+                ].map((t) => (
                   <button
-                    key={m}
-                    onClick={() => setModelType(m)}
-                    className={`py-2.5 px-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all font-['Space_Grotesk'] ${
-                      modelType === m
-                        ? 'bg-amber-500 text-slate-950 shadow-lg'
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
+                    key={t.id}
+                    onClick={() => setTimeline(t.id as any)}
+                    className={`py-2 px-2 rounded-xl text-xs font-semibold font-['Space_Grotesk'] transition-all border ${
+                      timeline === t.id
+                        ? 'bg-[#081426] text-white border-[#081426] shadow-md'
+                        : 'bg-white/60 text-[#4a5568] border-black/10 hover:bg-white'
                     }`}
                   >
-                    {m === 'odc' ? 'ODC' : m === 'bot' ? 'BOT' : 'Sovereign GCC'}
+                    {t.label}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Retention Note */}
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 flex items-center gap-3">
-              <Users className="w-5 h-5 text-amber-400 flex-shrink-0" />
-              <div className="text-xs text-slate-300 leading-snug">
-                <strong className="text-white">98.2% Retention Advantage:</strong> Tier-2 Jaipur eliminates the 25–35% annual attrition endemic to Bengaluru and Gurugram, preserving institutional code knowledge.
+            {/* Ownership & Legal Strategy */}
+            <div className="space-y-2">
+              <label className="text-xs font-bold font-['Space_Grotesk'] uppercase tracking-wider text-[#081426] block">
+                Ownership & Legal Strategy
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { id: 'vendor', label: 'No Local Entity' },
+                  { id: 'transfer', label: 'Phased (BOT)' },
+                  { id: 'direct', label: 'Wholly-Owned GCC' },
+                ].map((o) => (
+                  <button
+                    key={o.id}
+                    onClick={() => setOwnership(o.id as any)}
+                    className={`py-2 px-2 rounded-xl text-xs font-semibold font-['Space_Grotesk'] transition-all border ${
+                      ownership === o.id
+                        ? 'bg-[#081426] text-white border-[#081426] shadow-md'
+                        : 'bg-white/60 text-[#4a5568] border-black/10 hover:bg-white'
+                    }`}
+                  >
+                    {o.label}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Results Display (Right 6 Cols) */}
-          <div className="lg:col-span-6 rounded-2xl border border-amber-500/30 bg-gradient-to-br from-[#0c2240] to-[#081528] p-6 sm:p-8 space-y-6">
-            <div className="space-y-1">
-              <span className="text-xs uppercase tracking-widest text-amber-400 font-bold font-['Space_Grotesk']">
-                Estimated Annual Net Savings
+          {/* Results Output (Right 6 Cols) */}
+          <div className="lg:col-span-6 rounded-2xl bg-[#081426] text-white p-6 sm:p-8 space-y-6 shadow-2xl border border-white/10">
+            <div className="space-y-2">
+              <span className="text-[0.65rem] uppercase tracking-widest text-amber-400 font-bold font-['Space_Grotesk'] block">
+                Recommended Strategic Structure
               </span>
-              <div className="text-4xl sm:text-5xl font-extrabold text-white font-mono tracking-tight">
-                ${(savingsVsUs / 1000).toLocaleString()}k <span className="text-lg text-emerald-400">/ yr</span>
+              <div className="text-2xl sm:text-3xl font-bold text-white font-serif">
+                {rec.name}
               </div>
-              <p className="text-xs text-slate-400">
-                Approx. <strong className="text-emerald-400">{savingsPercentVsUs}% reduction</strong> compared to equivalent in-house staffing costs.
+              <p className="text-xs text-slate-300 leading-relaxed">
+                {rec.explanation}
               </p>
             </div>
 
-            {/* Breakdown Grid */}
-            <div className="space-y-3 pt-4 border-t border-white/10 text-xs">
-              <div className="flex justify-between items-center text-slate-300">
-                <span>US/EU In-House Benchmark</span>
-                <span className="font-mono line-through text-slate-500">
-                  ${(totalUsCost / 1000).toLocaleString()}k
+            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+              <div>
+                <span className="text-[0.65rem] uppercase tracking-wider text-slate-400 block font-mono">
+                  Estimated Ramp:
+                </span>
+                <span className="text-lg font-bold text-white font-['Space_Grotesk']">
+                  {rec.ramp}
                 </span>
               </div>
-              <div className="flex justify-between items-center text-slate-300">
-                <span>Tier-1 India (Bengaluru)</span>
-                <span className="font-mono text-slate-400">
-                  ${(totalTier1Cost / 1000).toLocaleString()}k
+              <div>
+                <span className="text-[0.65rem] uppercase tracking-wider text-slate-400 block font-mono">
+                  Projected Retention:
                 </span>
-              </div>
-              <div className="flex justify-between items-center text-amber-300 font-bold text-sm bg-amber-500/10 p-2.5 rounded-xl border border-amber-500/20">
-                <span>Edish Jaipur Center ({modelType.toUpperCase()})</span>
-                <span className="font-mono text-white">
-                  ${(totalEdishCost / 1000).toLocaleString()}k
+                <span className="text-lg font-bold text-amber-400 font-mono">
+                  {rec.retention}
                 </span>
               </div>
             </div>
 
             <a
               href="#contact"
-              className="btn-gold-solid w-full flex items-center justify-center gap-2 py-3.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider font-['Space_Grotesk'] shadow-xl cursor-pointer"
+              className="btn-gold-solid w-full flex items-center justify-center gap-2 py-3 rounded-full text-xs font-bold uppercase tracking-wider font-['Space_Grotesk'] shadow-xl cursor-pointer"
             >
-              <span>Request Detailed Financial Model</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>Request Custom Scope Proposal</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </a>
           </div>
         </div>
