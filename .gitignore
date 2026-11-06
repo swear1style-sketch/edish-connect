@@ -1,0 +1,6 @@
+.DS_Store
+__MACOSX/
+extracted_site/
+*.log
+/tmp/
+node_modules/
